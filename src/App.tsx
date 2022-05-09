@@ -1,8 +1,8 @@
-import { Box, Center } from "@chakra-ui/react"
-import Calendar from "./components/Calendar"
-import Events from "./components/Events"
+import { Box, Center } from '@chakra-ui/react'
+import Calendar from './components/Calendar'
+import Events from './components/Events'
 
-function App() {
+function App () {
   return (
     <Box
       bg='#F4F4F4'
@@ -17,7 +17,7 @@ function App() {
         </Box>
       </Center>
     </Box>
-  );
+  )
 }
 
-export default App;
+export default App

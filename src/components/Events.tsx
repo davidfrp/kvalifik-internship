@@ -7,7 +7,7 @@ type Props = {
 
 const Events: FC<Props> = () => {
   return (
-    <Box 
+    <Box
       w='500px'
       bg='white'
       h='80px'
