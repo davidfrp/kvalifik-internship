@@ -1,22 +1,22 @@
 import { Box, Center } from '@chakra-ui/react'
 import { useState } from 'react'
 import Calendar from './components/Calendar'
-import Events from './components/Events'
+import EventList from './components/EventList'
 
 function App () {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 
   return (
     <Box
+      minH='100vh'
       bg='#F4F4F4'
       w='100%'
-      h='100vh'
       p='10'
     >
       <Center>
         <Box>
           <Calendar selectedDate={selectedDate} onChange={setSelectedDate} />
-          <Events/>
+          <EventList selectedDate={selectedDate} />
         </Box>
       </Center>
     </Box>

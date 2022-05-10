@@ -1,24 +1,10 @@
 import { Box, Table, Thead, Tbody, Tr, Td, Flex, Button, ButtonGroup, IconButton } from '@chakra-ui/react'
 import { FC, ReactElement, useEffect, useState } from 'react'
+import { MonthNames } from '../common/monthNames'
 
 type Props = {
   selectedDate: Date,
   onChange: (date: Date) => void
-}
-
-enum MonthNames {
-  January,
-  February,
-  March,
-  April,
-  May,
-  June,
-  July,
-  August,
-  September,
-  October,
-  November,
-  December
 }
 
 const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
@@ -29,7 +15,7 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
    * Offsets the shown month by the given amount.
    * @param offset The number of months to offset the calendar by. 0 resets to the selected month.
    */
-  const offsetShownMonth = (offset: number): void => {
+  const offsetShownMonth = (offset: number) => {
     const newShownDate = new Date(shownDate)
     newShownDate.setMonth(newShownDate.getMonth() + offset)
     if (offset === 0) {
@@ -42,7 +28,7 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
   /**
    * Updates the calendar to display dates for the month of `shownDate`.
    */
-  const updateCalendar = (): void => {
+  const updateCalendar = () => {
     if (selectedDate) {
       // Takes the zeroth day of the next month, which is the last day of the current month.
       const daysInShownMonth = new Date(shownDate.getFullYear(), shownDate.getMonth() + 1, 0).getDate()
@@ -75,10 +61,10 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
               <Button
                 disabled={isOutOfRange}
                 variant='unstyled' h='full' w='full'
-                fontWeight='inherit'
+                fontWeight='inherit' fontSize='inherit'
                 onClick={() => onChange(cellDate)}
               >
-                <Box position='absolute' bottom='1.5' right='1.5' fontSize='20px'>
+                <Box position='absolute' bottom='1.5' right='1.5'>
                   {cellDate.getDate()}.
                 </Box>
               </Button>
@@ -104,21 +90,22 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
       boxShadow='0 0 99px 0px rgba(0, 0, 0, 0.04)'
       fontFamily='Roboto'
       fontWeight='light'
+      fontSize='xl'
     >
       <Flex w='full' px='1.875rem' bg='' justify='space-between'>
-        <Box py='1.5625rem' fontSize='xl' fontWeight='bold' color='#707070'>
+        <Box py='1.5625rem' fontWeight='bold' color='#707070'>
           {MonthNames[shownDate.getMonth()]}
           <Box as='span' fontWeight='normal' ml='1.5'>
             {shownDate.getFullYear()}
           </Box>
         </Box>
         <ButtonGroup alignItems='center'>
-          <IconButton aria-label='View previous month' onClick={() => offsetShownMonth(-1)} />
+          <IconButton isRound aria-label='View previous month' onClick={() => offsetShownMonth(-1)} />
           <Button variant='ghost' onClick={() => {
             offsetShownMonth(0)
             onChange(new Date())
           }}>Today</Button>
-          <IconButton aria-label='View next month' onClick={() => offsetShownMonth(1)} />
+          <IconButton isRound aria-label='View next month' onClick={() => offsetShownMonth(1)} />
         </ButtonGroup>
       </Flex>
       <Table variant='unstyled'>
