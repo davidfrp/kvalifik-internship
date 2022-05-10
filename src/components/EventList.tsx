@@ -1,4 +1,5 @@
 import { Box, Heading, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useState } from 'react'
 import { MonthNames } from '../common/monthNames'
 import EventItem from './EventItem'
@@ -57,16 +58,18 @@ const EventList: FC<Props> = ({ selectedDate }: Props) => {
         alignItems='center'
       >
         <Input
-          p='5' pr='4.5rem' placeholder='Add new event'
+          p='5' pr='16' placeholder='Add new event'
           variant='unstyled' color='#707070' fontSize='xl'
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={handleKeyPress}
           value={description}
         />
-        <InputRightElement mr='1.375rem' top='unset'>
+        <InputRightElement mr='5' top='unset'>
           <IconButton
             aria-label='Add new event'
             onClick={() => addEvent({ description, date: selectedDate })}
+            icon={<AddIcon color='white' />}
+            size='sm' bg='#8c5ec3'
             isRound
           />
         </InputRightElement>

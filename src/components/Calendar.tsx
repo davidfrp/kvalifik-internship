@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { Box, Table, Thead, Tbody, Tr, Td, Flex, Button, ButtonGroup, IconButton } from '@chakra-ui/react'
 import { FC, ReactElement, useEffect, useState } from 'react'
 import { MonthNames } from '../common/monthNames'
@@ -52,14 +53,13 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
 
           cells.push(
             <Td
-              h='3.25rem' w='4.5rem' p='0'
-              border='1px' borderColor='#F2F2F2'
-              position='relative'
-              bg={isSelectedDate ? '#A170DB' : undefined}
-              color={isSelectedDate ? 'white' : 'inherit'}
+              border='1px' borderColor='#f2f2f2'
+              h='3.25rem' w='4.5rem' p='0' position='relative'
+              bg={isSelectedDate ? '#a170db' : undefined}
+              color={isOutOfRange ? '#dfdfdf' : (isSelectedDate ? 'white' : 'inherit')}
             >
               <Button
-                disabled={isOutOfRange}
+                pointerEvents={isOutOfRange ? 'none' : 'auto'}
                 variant='unstyled' h='full' w='full'
                 fontWeight='inherit' fontSize='inherit'
                 onClick={() => onChange(cellDate)}
@@ -89,29 +89,44 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
       mb='10' maxW='500px' borderRadius='13px'
       boxShadow='0 0 99px 0px rgba(0, 0, 0, 0.04)'
       fontFamily='Roboto'
-      fontWeight='light'
       fontSize='xl'
     >
-      <Flex w='full' px='1.875rem' bg='' justify='space-between'>
-        <Box py='1.5625rem' fontWeight='bold' color='#707070'>
+      <Flex w='full' pl='8' pr='5' justify='space-between' fontSize='xl'>
+        <Box py='5' fontWeight='bold' color='#707070'>
           {MonthNames[shownDate.getMonth()]}
           <Box as='span' fontWeight='normal' ml='1.5'>
             {shownDate.getFullYear()}
           </Box>
         </Box>
-        <ButtonGroup alignItems='center'>
-          <IconButton isRound aria-label='View previous month' onClick={() => offsetShownMonth(-1)} />
-          <Button variant='ghost' onClick={() => {
-            offsetShownMonth(0)
-            onChange(new Date())
-          }}>Today</Button>
-          <IconButton isRound aria-label='View next month' onClick={() => offsetShownMonth(1)} />
+        <ButtonGroup alignItems='center' spacing={1}>
+          <IconButton
+            aria-label='View previous month'
+            onClick={() => offsetShownMonth(-1)}
+            icon={<ChevronLeftIcon color='white' w={6} h={6} />}
+            size='sm' bg='#8c5ec3' _hover={{ bg: '#a170db' }}
+            isRound
+          />
+          <Button
+            variant='ghost' color='#8c5ec3'
+            fontSize='inherit' fontWeight='medium'
+            onClick={() => {
+              offsetShownMonth(0)
+              onChange(new Date())
+            }
+          }>Today</Button>
+          <IconButton
+            aria-label='View next month'
+            onClick={() => offsetShownMonth(1)}
+            icon={<ChevronRightIcon color='white' w={6} h={6} />}
+            size='sm' bg='#8c5ec3' _hover={{ bg: '#a170db' }}
+            isRound
+          />
         </ButtonGroup>
       </Flex>
       <Table variant='unstyled'>
         <Thead>
         </Thead>
-        <Tbody>
+        <Tbody fontWeight='light'>
           {tableRows}
         </Tbody>
       </Table>

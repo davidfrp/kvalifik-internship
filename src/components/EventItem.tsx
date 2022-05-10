@@ -1,4 +1,5 @@
-import { Box, IconButton } from '@chakra-ui/react'
+import { Box, IconButton, Text } from '@chakra-ui/react'
+import { SmallCloseIcon } from '@chakra-ui/icons'
 import type { FC } from 'react'
 
 type Props = {
@@ -15,14 +16,17 @@ const EventItem: FC<Props> = ({ description, onRequestRemove }: Props) => {
       display='flex'
       justifyContent='center'
       alignItems='center'
+      maxW={'500px'}
     >
       <Box color='#707070' w='100%' p='5' pr='0' fontSize='xl'>
-        {description}
+        <Text noOfLines={3}>{description}</Text>
       </Box>
       <IconButton
         aria-label='Add new event'
-        bg='green' m='5' size='sm'
+        m='8' size='xsm' bg='#d9d9d9'
+        _hover={{ bg: '#ebebeb' }}
         onClick={onRequestRemove}
+        icon={<SmallCloseIcon color='white' />}
         isRound
       />
     </Box>

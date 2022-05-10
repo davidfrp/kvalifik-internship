@@ -9,9 +9,9 @@ function App () {
   return (
     <Box
       minH='100vh'
-      bg='#F4F4F4'
+      bg='#f4f4f4'
       w='100%'
-      p='10'
+      p='16'
     >
       <Center>
         <Box>
