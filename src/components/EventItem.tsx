@@ -4,7 +4,7 @@ import type { FC } from 'react'
 
 type Props = {
   description: string,
-  onRequestRemove: () => void
+  onRequestRemove?: () => void
 }
 
 const EventItem: FC<Props> = ({ description, onRequestRemove }: Props) => {
@@ -21,14 +21,16 @@ const EventItem: FC<Props> = ({ description, onRequestRemove }: Props) => {
       <Box color='#707070' w='100%' p='5' pr='0' fontSize='xl'>
         <Text noOfLines={3}>{description}</Text>
       </Box>
-      <IconButton
-        aria-label='Add new event'
-        m='8' size='xsm' bg='#d9d9d9'
-        _hover={{ bg: '#ebebeb' }}
-        onClick={onRequestRemove}
-        icon={<SmallCloseIcon color='white' />}
-        isRound
-      />
+      {onRequestRemove && (
+        <IconButton
+          aria-label='Add new event'
+          m='8' size='xsm' bg='#d9d9d9'
+          _hover={{ bg: '#ebebeb' }}
+          onClick={onRequestRemove}
+          icon={<SmallCloseIcon color='white' />}
+          isRound
+        />
+      )}
     </Box>
   )
 }
