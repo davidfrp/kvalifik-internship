@@ -20,7 +20,7 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
     const newShownDate = new Date(shownDate)
     newShownDate.setMonth(newShownDate.getMonth() + offset)
     if (offset === 0) {
-      setShownDate(selectedDate)
+      setShownDate(new Date())
     } else {
       setShownDate(newShownDate)
     }
