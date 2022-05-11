@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
-import { Box, Table, Thead, Tbody, Tr, Td, Flex, Button, ButtonGroup, IconButton } from '@chakra-ui/react'
-import { FC, ReactElement, useEffect, useState } from 'react'
+import { Box, Flex, Button, ButtonGroup, IconButton } from '@chakra-ui/react'
+import { FC, useEffect, useState } from 'react'
 import { MonthNames } from '../common/monthNames'
 
 type Props = {
@@ -8,21 +8,27 @@ type Props = {
   onChange: (date: Date) => void
 }
 
+type CalendarDate = {
+  date: Date,
+  isSelected: boolean,
+  isInMonth: boolean
+}
+
 const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
-  const [shownDate, setShownDate] = useState<Date>(selectedDate)
-  const [tableRows, setTableRows] = useState<ReactElement[]>([])
+  const [dateOfMonthShown, setDateOfMonthShown] = useState<Date>(selectedDate)
+  const [shownDates, setShownDates] = useState<CalendarDate[]>([])
 
   /**
    * Offsets the shown month by the given amount.
    * @param offset The number of months to offset the calendar by. 0 resets to the selected month.
    */
   const offsetShownMonth = (offset: number) => {
-    const newShownDate = new Date(shownDate)
+    const newShownDate = new Date(dateOfMonthShown)
     newShownDate.setMonth(newShownDate.getMonth() + offset)
     if (offset === 0) {
-      setShownDate(new Date())
+      setDateOfMonthShown(new Date())
     } else {
-      setShownDate(newShownDate)
+      setDateOfMonthShown(newShownDate)
     }
   }
 
@@ -32,70 +38,45 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
   const updateCalendar = () => {
     if (selectedDate) {
       // Takes the zeroth day of the next month, which is the last day of the current month.
-      const daysInShownMonth = new Date(shownDate.getFullYear(), shownDate.getMonth() + 1, 0).getDate()
+      const daysInShownMonth = new Date(dateOfMonthShown.getFullYear(), dateOfMonthShown.getMonth() + 1, 0).getDate()
 
       // Which week day does the month start on? 0 is Monday, 6 is Sunday
-      const weekDayOffset = (new Date(shownDate.getFullYear(), shownDate.getMonth(), 1).getDay() + 6) % 7
+      const weekDayOffset = (new Date(dateOfMonthShown.getFullYear(), dateOfMonthShown.getMonth(), 1).getDay() + 6) % 7
 
-      const rowCount: number = Math.ceil((daysInShownMonth + weekDayOffset) / 7)
-      const rows: ReactElement[] = []
+      const numberOfGrids = Math.ceil((daysInShownMonth + weekDayOffset) / 7) * 7
 
-      for (let i = 0; i < rowCount; i++) {
-        const cells: ReactElement[] = []
+      const dates: { date: Date, isSelected: boolean, isInMonth: boolean }[] = []
+      for (let i = 0; i < numberOfGrids; i++) {
+        const offset = i - weekDayOffset + 1
+        const date = new Date(dateOfMonthShown.getFullYear(), dateOfMonthShown.getMonth(), offset)
 
-        // For each row fill in the dates.
-        for (let j = 0; j < 7; j++) {
-          // Days offset from the first day of the month.
-          const offset = i * 7 + j + 1 - weekDayOffset
-          const cellDate = new Date(shownDate.getFullYear(), shownDate.getMonth(), offset)
-          const isSelectedDate = selectedDate.toDateString() === cellDate.toDateString()
-          const isOutOfRange = offset < 1 || offset > daysInShownMonth
+        const isSelected = date.toDateString() === selectedDate.toDateString()
+        const isInMonth = offset > 0 && offset <= daysInShownMonth
 
-          cells.push(
-            <Td
-              border='1px' borderColor='#f2f2f2'
-              h='3.25rem' w='4.5rem' p='0' position='relative'
-              bg={isSelectedDate ? '#a170db' : undefined}
-              color={isOutOfRange ? '#dfdfdf' : (isSelectedDate ? 'white' : 'inherit')}
-            >
-              <Button
-                pointerEvents={isOutOfRange ? 'none' : 'auto'}
-                variant='unstyled' h='full' w='full'
-                fontWeight='inherit' fontSize='inherit'
-                onClick={() => onChange(cellDate)}
-              >
-                <Box position='absolute' bottom='1.5' right='1.5'>
-                  {cellDate.getDate()}.
-                </Box>
-              </Button>
-            </Td>
-          )
-        }
-
-        rows.push(<Tr>{cells}</Tr>)
+        dates.push(({ date, isSelected, isInMonth }))
       }
 
-      setTableRows(rows)
+      setShownDates(dates)
     }
   }
 
   useEffect(() => {
     updateCalendar()
-  }, [shownDate, selectedDate])
+  }, [dateOfMonthShown, selectedDate])
 
   return (
     <Box
       bg='white' color='#707070'
-      mb='10' maxW='500px' borderRadius='13px'
-      boxShadow='0 0 99px 0px rgba(0, 0, 0, 0.04)'
+      mb={10} maxW='lg' borderRadius='13px'
+      boxShadow='0 0 15px 0 rgba(0, 0, 0, 0.04)'
       fontFamily='Roboto'
       fontSize='xl'
     >
-      <Flex w='full' pl='8' pr='5' justify='space-between' fontSize='xl'>
-        <Box py='5' fontWeight='bold' color='#707070'>
-          {MonthNames[shownDate.getMonth()]}
-          <Box as='span' fontWeight='normal' ml='1.5'>
-            {shownDate.getFullYear()}
+      <Flex pl={8} pr={5} justify='space-between' fontSize='xl'>
+        <Box py={5} fontWeight='bold' color='#707070'>
+          {MonthNames[dateOfMonthShown.getMonth()]}
+          <Box as='span' fontWeight='normal' ml={1.5}>
+            {dateOfMonthShown.getFullYear()}
           </Box>
         </Box>
         <ButtonGroup alignItems='center' spacing={1}>
@@ -123,13 +104,38 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
           />
         </ButtonGroup>
       </Flex>
-      <Table variant='unstyled'>
-        <Thead>
-        </Thead>
-        <Tbody fontWeight='light'>
-          {tableRows}
-        </Tbody>
-      </Table>
+      <Flex wrap='wrap'>
+        {shownDates.map(({ date, isSelected, isInMonth }: CalendarDate, index) => (
+          <Box
+            key={index}
+            flex='1 0 calc(100%/7)'
+            h='3.25rem' pos='relative'
+            borderRight='1px' borderTop='1px' borderColor='#f2f2f2'
+            sx={{
+              ':nth-child(7n)': { borderRight: 'none' },
+              ':nth-last-child(7) :first-child': { borderBottomLeftRadius: '13px' },
+              ':last-child :first-child': { borderBottomRightRadius: '13px' }
+            }}
+          >
+            <Box h='full' bg={isSelected ? '#a170db' : 'white'}>
+              <Button
+                variant='unstyled' h='full' w='full'
+                fontWeight='light' fontSize='inherit'
+                color={isSelected ? 'white' : '#707070'}
+                opacity={isInMonth ? undefined : 0.38}
+                tabIndex={isInMonth ? undefined : -1}
+                pointerEvents={isInMonth ? undefined : 'none'}
+                onClick={() => onChange(date)}
+                zIndex={1}
+              >
+                <Box as='span' pos='absolute' bottom={0.25} right={1.5}>
+                  {date.getDate()}.
+                </Box>
+              </Button>
+            </Box>
+          </Box>
+        ))}
+      </Flex>
     </Box>
   )
 }
