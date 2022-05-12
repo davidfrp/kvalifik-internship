@@ -84,7 +84,8 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
             aria-label='View previous month'
             onClick={() => offsetShownMonth(-1)}
             icon={<ChevronLeftIcon color='white' w={6} h={6} />}
-            size='sm' bg='#8c5ec3' _hover={{ bg: '#a170db' }}
+            colorScheme='brand'
+            size='sm'
             isRound
           />
           <Button
@@ -99,7 +100,8 @@ const Calendar: FC<Props> = ({ selectedDate, onChange }: Props) => {
             aria-label='View next month'
             onClick={() => offsetShownMonth(1)}
             icon={<ChevronRightIcon color='white' w={6} h={6} />}
-            size='sm' bg='#8c5ec3' _hover={{ bg: '#a170db' }}
+            colorScheme='brand'
+            size='sm'
             isRound
           />
         </ButtonGroup>

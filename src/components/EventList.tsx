@@ -1,4 +1,4 @@
-import { Box, Heading, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Heading, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useState } from 'react'
 import { MonthNames } from '../common/monthNames'
@@ -47,13 +47,13 @@ const EventList: FC<Props> = ({ selectedDate }: Props) => {
   }, [selectedDate])
 
   return (
-    <Box>
-      <Heading as='h2' size='lg' m='5' mb='3' fontWeight='thin' color='#707070'>
+    <>
+      <Heading as='h2' size='lg' m={5} mb={3} fontWeight='thin' color='#707070'>
         {MonthNames[selectedDate.getMonth()]} {selectedDate.getDate()}
       </Heading>
       <InputGroup
-        bg='white' maxW='500px' borderRadius='13px'
-        boxShadow='0 0 99px 0px rgba(0, 0, 0, 0.04)'
+        bg='white' borderRadius='13px'
+        boxShadow='0 0 15px 0 rgba(0, 0, 0, 0.04)'
         display='flex' justifyContent='center'
         alignItems='center'
       >
@@ -63,13 +63,14 @@ const EventList: FC<Props> = ({ selectedDate }: Props) => {
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={handleKeyPress}
           value={description}
-        />
+          />
         <InputRightElement mr='5' top='unset'>
           <IconButton
             aria-label='Add new event'
             onClick={() => addEvent({ description, date: selectedDate })}
             icon={<AddIcon color='white' />}
-            size='sm' bg='#8c5ec3'
+            colorScheme="brand"
+            size='sm'
             isRound
           />
         </InputRightElement>
@@ -83,7 +84,7 @@ const EventList: FC<Props> = ({ selectedDate }: Props) => {
           onRequestRemove={() => removeEvent(event)}
         />
       )).reverse()}
-    </Box>
+    </>
   )
 }
 

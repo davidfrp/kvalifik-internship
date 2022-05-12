@@ -10,11 +10,10 @@ function App () {
     <Box
       minH='100vh'
       bg='#f4f4f4'
-      w='100%'
-      p='16'
+      p={[4, 16]}
     >
       <Center>
-        <Box>
+        <Box w='100%' maxW='lg'>
           <Calendar selectedDate={selectedDate} onChange={setSelectedDate} />
           <EventList selectedDate={selectedDate} />
         </Box>
